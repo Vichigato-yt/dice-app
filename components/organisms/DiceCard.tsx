@@ -1,24 +1,26 @@
+import type { DiceFace, Vector3D } from "@/lib/core/domain";
 import { Dice6 } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "../atoms/Button";
-import { Dice3D } from "../atoms/Dice3D";
+import { Dice3D } from "./Dice3D";
 
 type DiceCardProps = {
-	value: number;
+	value: DiceFace;
 	isRolling: boolean;
+	isIdle: boolean;
 	onRoll: () => void;
-	motionData?: { x: number; y: number; z: number } | null;
+	motionData: Vector3D | null;
 };
 
-export function DiceCard({ value, isRolling, onRoll, motionData }: DiceCardProps) {
+export function DiceCard({ value, isRolling, isIdle, onRoll, motionData }: DiceCardProps) {
 	return (
 		<View style={styles.card}>
 			<View style={styles.titleContainer}>
-				<Dice6 size={28} color="#1a1a1a" strokeWidth={2.5} />
+				<Dice6 size={32} color="#1a1a1a" strokeWidth={2.5} />
 				<Text style={styles.title}>Magic Dice 3D</Text>
 			</View>
 			<View style={styles.diceContainer}>
-				<Dice3D value={value} isRolling={isRolling} motionData={motionData} />
+				<Dice3D value={value} isRolling={isRolling} isIdle={isIdle} motionData={motionData} />
 			</View>
 			<Button onPress={onRoll} variant="primary">
 				Lanzar Dado
@@ -29,17 +31,13 @@ export function DiceCard({ value, isRolling, onRoll, motionData }: DiceCardProps
 
 const styles = StyleSheet.create({
 	card: {
-		backgroundColor: "#f8f8f8",
-		borderRadius: 20,
-		padding: 32,
-		gap: 24,
+		flex: 1,
+		width: "100%",
+		backgroundColor: "#ffffff",
+		gap: 20,
 		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.1,
-		shadowRadius: 12,
-		elevation: 4,
-		minWidth: 300,
+		justifyContent: "space-around",
+		paddingVertical: 20,
 	},
 	titleContainer: {
 		flexDirection: "row",
@@ -47,11 +45,14 @@ const styles = StyleSheet.create({
 		gap: 8,
 	},
 	title: {
-		fontSize: 28,
+		fontSize: 24,
 		fontWeight: "700",
 		color: "#1a1a1a",
 	},
 	diceContainer: {
-		marginVertical: 16,
+		width: 300,
+		height: 300,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });

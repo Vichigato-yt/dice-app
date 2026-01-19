@@ -1,83 +1,83 @@
-// Pantalla del Juego
+// Pantalla del Juego - Presentación
 import { Button } from "@/components/atoms/Button";
-import { DiceCard } from "@/components/molecules/DiceCard";
-import { SensorInfo } from "@/components/molecules/SensorInfo";
+import { DiceCard } from "@/components/organisms/DiceCard";
+import { DiceLogic, type DiceFace } from "@/lib/core/domain";
 import { useAccelerometer } from "@/lib/modules/sensors/accelerometer";
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
-import { Smartphone } from "lucide-react-native";
-import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-
-function roll(): number {
-	return Math.floor(Math.random() * 6) + 1;
-}
+import { useEffect, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 export default function DiceScreen() {
 	const router = useRouter();
-	const [value, setValue] = useState<number>(1);
+	const [value, setValue] = useState<DiceFace>(1);
 	const [isRolling, setIsRolling] = useState(false);
+	const [isIdle, setIsIdle] = useState(true);
+	const motionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const handleRoll = () => {
 		setIsRolling(true);
-		const r = roll();
-		setValue(r);
+		setIsIdle(false);
+		const newFace = DiceLogic.rollRandom();
+		setValue(newFace);
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-		setTimeout(() => setIsRolling(false), 400);
 	};
 
-	const { isShake, data } = useAccelerometer({
+	const { data } = useAccelerometer({
 		onShake: handleRoll,
 	});
 
+	// Detener rotación cuando no hay movimiento
+	useEffect(() => {
+		if (data && (Math.abs(data.x) > 0.1 || Math.abs(data.y) > 0.1 || Math.abs(data.z) > 0.1)) {
+			setIsRolling(true);
+			setIsIdle(false);
+			
+			// Limpiar timeouts anteriores
+			if (motionTimeoutRef.current) clearTimeout(motionTimeoutRef.current);
+			if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+			
+			// Detener rotación 3 segundos después de que se estabilice
+			motionTimeoutRef.current = setTimeout(() => {
+				setIsRolling(false);
+				
+				// Mantener estático 2 segundos, luego volver a idle
+				idleTimeoutRef.current = setTimeout(() => {
+					setIsIdle(true);
+				}, 2000);
+			}, 3000);
+		}
+
+		return () => {
+			if (motionTimeoutRef.current) clearTimeout(motionTimeoutRef.current);
+			if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+		};
+	}, [data]);
+
 	return (
-		<ScrollView contentContainerStyle={styles.container}>
-			<View style={styles.content}>
-				<DiceCard value={value} isRolling={isRolling} onRoll={handleRoll} />
+		<View style={styles.container}>
+			<DiceCard 
+				value={value} 
+				isRolling={isRolling} 
+				isIdle={isIdle}
+				onRoll={handleRoll}
+				motionData={data}
+			/>
 
-				<View style={styles.instructionBox}>
-					<Smartphone size={32} color="#92400e" strokeWidth={2} />
-					<Text style={styles.instructionText}>
-						Agita tu dispositivo para lanzar el dado automáticamente
-					</Text>
-				</View>
-
-				<SensorInfo data={data} isShaking={isShake} />
-
-				<Button onPress={() => router.push("/")} variant="secondary">
-					← Volver al Inicio
-				</Button>
-			</View>
-		</ScrollView>
+			<Button onPress={() => router.push("/")} variant="secondary">
+				← Volver al Inicio
+			</Button>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flexGrow: 1,
-		backgroundColor: "#ffffff",
-	},
-	content: {
 		flex: 1,
-		padding: 24,
-		gap: 20,
-		justifyContent: "center",
+		backgroundColor: "#ffffff",
+		justifyContent: "space-between",
 		alignItems: "center",
-	},
-	instructionBox: {
-		backgroundColor: "#fef3c7",
-		borderRadius: 12,
-		padding: 16,
-		gap: 8,
-		alignItems: "center",
-		borderWidth: 1,
-		borderColor: "#fbbf24",
-		maxWidth: 320,
-	},
-	instructionText: {
-		fontSize: 14,
-		color: "#92400e",
-		textAlign: "center",
-		fontWeight: "500",
+		paddingBottom: 20,
 	},
 });
