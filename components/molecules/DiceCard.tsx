@@ -1,16 +1,18 @@
 import { Dice6 } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "../atoms/Button";
-import { Dice3D } from "../atoms/Dice3D";
+import { Dice3D } from "../organisms/Dice3D";
+import type { DiceFace, Vector3D } from "@/lib/core/domain";
 
 type DiceCardProps = {
-	value: number;
+	value: DiceFace;
 	isRolling: boolean;
+	isIdle?: boolean;
 	onRoll: () => void;
-	motionData?: { x: number; y: number; z: number } | null;
+	motionData?: Vector3D | null;
 };
 
-export function DiceCard({ value, isRolling, onRoll, motionData }: DiceCardProps) {
+export function DiceCard({ value, isRolling, isIdle = false, onRoll, motionData }: DiceCardProps) {
 	return (
 		<View style={styles.card}>
 			<View style={styles.titleContainer}>
@@ -18,7 +20,7 @@ export function DiceCard({ value, isRolling, onRoll, motionData }: DiceCardProps
 				<Text style={styles.title}>Magic Dice 3D</Text>
 			</View>
 			<View style={styles.diceContainer}>
-				<Dice3D value={value} isRolling={isRolling} motionData={motionData} />
+				<Dice3D value={value} isRolling={isRolling} isIdle={isIdle} motionData={motionData ?? null} />
 			</View>
 			<Button onPress={onRoll} variant="primary">
 				Lanzar Dado

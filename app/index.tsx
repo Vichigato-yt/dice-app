@@ -33,7 +33,10 @@ export default function Index() {
 
       <View style={styles.actions}>
         <Button onPress={() => router.push("/games/dice")} variant="primary">
-          Jugar Ahora
+          Jugar al Dado
+        </Button>
+        <Button onPress={() => router.push("/games/hamburger")} variant="secondary">
+          Ver Hamburguesa
         </Button>
       </View>
 
@@ -86,6 +89,7 @@ const styles = StyleSheet.create({
   actions: {
     width: "100%",
     maxWidth: 300,
+    gap: 12,
   },
   footer: {
     fontSize: 12,
