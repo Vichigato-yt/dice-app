@@ -3,15 +3,13 @@ import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
 import {
 	HAMBURGER_INGREDIENTS,
-	HamburgerIngredient,
+	type HamburgerIngredient,
 	calculateHamburgerPrice,
-	BASE_HAMBURGER_PRICE,
-	type HamburgerOrder,
 } from "@/lib/core/domain/hamburger.types";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
-import { ShoppingCart, Plus, X } from "lucide-react-native";
+import { ShoppingCart, Plus, Minus, X, ChevronUp, ChevronDown } from "lucide-react-native";
 
 const INGREDIENTS_LIST: HamburgerIngredient[] = ["queso", "pepinillos", "lechuga", "carne"];
 
@@ -19,29 +17,47 @@ export default function HamburgerBuilderScreen() {
 	const router = useRouter();
 	const [selectedIngredients, setSelectedIngredients] = useState<HamburgerIngredient[]>([]);
 	const totalPrice = calculateHamburgerPrice(selectedIngredients);
+	const layerCount = selectedIngredients.length + 2;
 
-	const toggleIngredient = (ingredient: HamburgerIngredient) => {
+	const modelHeight = useMemo(() => {
+		// Crece con cada ingrediente para no “aplastar” la vista.
+		// Límite superior para evitar un canvas ridículamente grande.
+		return Math.min(720, 280 + layerCount * 18);
+	}, [layerCount]);
+
+	const addIngredient = (ingredient: HamburgerIngredient) => {
+		setSelectedIngredients((prev) => [...prev, ingredient]);
+	};
+
+	const removeOneIngredient = (ingredient: HamburgerIngredient) => {
 		setSelectedIngredients((prev) => {
-			if (prev.includes(ingredient)) {
-				return prev.filter((i) => i !== ingredient);
-			} else {
-				return [...prev, ingredient];
-			}
+			const index = prev.lastIndexOf(ingredient);
+			if (index === -1) return prev;
+			const next = [...prev];
+			next.splice(index, 1);
+			return next;
 		});
 	};
 
 	const handleBuy = () => {
-		const order: HamburgerOrder = {
-			ingredients: selectedIngredients,
-			totalPrice,
-			timestamp: Date.now(),
-		};
 		router.push({
 			pathname: "./hamburger-checkout",
 			params: {
 				ingredients: JSON.stringify(selectedIngredients),
 				totalPrice: totalPrice.toString(),
 			},
+		});
+	};
+
+	const moveIngredientAt = (index: number, direction: "up" | "down") => {
+		setSelectedIngredients((prev) => {
+			const targetIndex = direction === "up" ? index - 1 : index + 1;
+			if (targetIndex < 0 || targetIndex >= prev.length) return prev;
+			const next = [...prev];
+			const item = next[index];
+			next.splice(index, 1);
+			next.splice(targetIndex, 0, item);
+			return next;
 		});
 	};
 
@@ -58,7 +74,7 @@ export default function HamburgerBuilderScreen() {
 				</View>
 
 				{/* Hamburguesa 3D */}
-				<View style={styles.modelContainer}>
+				<View style={[styles.modelContainer, { height: modelHeight }]}>
 					<Hamburger3D selectedIngredients={selectedIngredients} layout="single" />
 				</View>
 
@@ -74,22 +90,23 @@ export default function HamburgerBuilderScreen() {
 					<View style={styles.ingredientsGrid}>
 						{INGREDIENTS_LIST.map((ingredient) => {
 							const config = HAMBURGER_INGREDIENTS[ingredient];
-							const isSelected = selectedIngredients.includes(ingredient);
+							const count = selectedIngredients.filter((i) => i === ingredient).length;
+							const hasAny = count > 0;
 
 							return (
 								<Pressable
 									key={ingredient}
-									onPress={() => toggleIngredient(ingredient)}
+									onPress={() => addIngredient(ingredient)}
 									style={[
 										styles.ingredientButton,
-										isSelected && styles.ingredientButtonSelected,
+										hasAny && styles.ingredientButtonSelected,
 									]}
 								>
 									<View style={styles.ingredientButtonContent}>
 										<Text
 											style={[
 												styles.ingredientButtonText,
-												isSelected && styles.ingredientButtonTextSelected,
+												hasAny && styles.ingredientButtonTextSelected,
 											]}
 										>
 											{config.label}
@@ -97,18 +114,39 @@ export default function HamburgerBuilderScreen() {
 										<Text
 											style={[
 												styles.ingredientPrice,
-												isSelected && styles.ingredientPriceSelected,
+												hasAny && styles.ingredientPriceSelected,
 											]}
 										>
 											+${config.price.toFixed(2)}
 										</Text>
 									</View>
-									<View style={styles.ingredientIcon}>
-										{isSelected ? (
-											<X size={20} color="#fff" strokeWidth={2.5} />
-										) : (
-											<Plus size={20} color="#1a1a1a" strokeWidth={2.5} />
-										)}
+									<View style={styles.ingredientControls}>
+										<View style={[styles.countBadge, hasAny ? styles.countBadgeSelected : null]}>
+											<Text style={[styles.countText, hasAny ? styles.countTextSelected : null]}>
+												{count}
+											</Text>
+										</View>
+										<Pressable
+											onPress={() => removeOneIngredient(ingredient)}
+											disabled={!hasAny}
+											style={({ pressed }) => [
+												styles.controlIconBtn,
+												hasAny ? styles.controlIconBtnSelected : null,
+												pressed ? styles.controlIconBtnPressed : null,
+											]}
+										>
+											<Minus size={18} color={hasAny ? "#fff" : "#9ca3af"} strokeWidth={2.5} />
+										</Pressable>
+										<Pressable
+											onPress={() => addIngredient(ingredient)}
+											style={({ pressed }) => [
+												styles.controlIconBtn,
+												styles.controlIconBtnAdd,
+												pressed ? styles.controlIconBtnPressed : null,
+											]}
+										>
+											<Plus size={18} color="#1a1a1a" strokeWidth={2.5} />
+										</Pressable>
 									</View>
 								</Pressable>
 							);
@@ -116,13 +154,13 @@ export default function HamburgerBuilderScreen() {
 					</View>
 				</View>
 
-				{/* Ingredientes seleccionados */}
+				{/* Orden de ingredientes seleccionados */}
 				{selectedIngredients.length > 0 && (
 					<View style={styles.selectedIngredientsSection}>
-						<Text style={styles.sectionTitle}>Tu Hamburguesa:</Text>
+						<Text style={styles.sectionTitle}>Tu Hamburguesa (orden):</Text>
 						<View style={styles.selectedList}>
 							<IngredientTag label="Pan Superior" color="#D4A574" />
-							{selectedIngredients.map((ingredient) => {
+							{selectedIngredients.map((ingredient, index) => {
 								const config = HAMBURGER_INGREDIENTS[ingredient];
 								const colorMap: Record<HamburgerIngredient, string> = {
 									queso: "#FFD700",
@@ -131,11 +169,29 @@ export default function HamburgerBuilderScreen() {
 									carne: "#8B4513",
 								};
 								return (
-									<IngredientTag
-										key={ingredient}
-										label={config.label}
-										color={colorMap[ingredient]}
-									/>
+									<View key={`${ingredient}-${index}`} style={styles.orderedRow}>
+										<IngredientTag label={config.label} color={colorMap[ingredient]} />
+										<View style={styles.orderButtons}>
+											<Pressable
+												onPress={() => moveIngredientAt(index, "up")}
+												disabled={index === 0}
+												style={({ pressed }) => [styles.orderIconBtn, pressed && styles.orderIconBtnPressed]}
+											>
+												<ChevronUp size={18} color={index === 0 ? "#9ca3af" : "#1a1a1a"} strokeWidth={2.5} />
+											</Pressable>
+											<Pressable
+												onPress={() => moveIngredientAt(index, "down")}
+												disabled={index === selectedIngredients.length - 1}
+												style={({ pressed }) => [styles.orderIconBtn, pressed && styles.orderIconBtnPressed]}
+											>
+												<ChevronDown
+													size={18}
+													color={index === selectedIngredients.length - 1 ? "#9ca3af" : "#1a1a1a"}
+													strokeWidth={2.5}
+												/>
+											</Pressable>
+										</View>
+									</View>
 								);
 							})}
 							<IngredientTag label="Pan Inferior" color="#D4A574" />
@@ -272,21 +328,90 @@ const styles = StyleSheet.create({
 	ingredientPriceSelected: {
 		color: "#d1d5db",
 	},
-	ingredientIcon: {
+	ingredientControls: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 8,
 		marginLeft: 12,
+	},
+	countBadge: {
+		minWidth: 30,
+		height: 26,
+		paddingHorizontal: 8,
+		borderRadius: 13,
+		backgroundColor: "#ffffff",
+		borderWidth: 1,
+		borderColor: "#e5e5e5",
 		alignItems: "center",
 		justifyContent: "center",
-		width: 28,
-		height: 28,
+	},
+	countBadgeSelected: {
+		backgroundColor: "#1a1a1a",
+		borderColor: "#1a1a1a",
+	},
+	countText: {
+		fontSize: 12,
+		fontWeight: "700",
+		color: "#1a1a1a",
+	},
+	countTextSelected: {
+		color: "#ffffff",
+	},
+	controlIconBtn: {
+		width: 34,
+		height: 34,
+		borderRadius: 10,
+		backgroundColor: "#1a1a1a",
+		borderWidth: 1,
+		borderColor: "#1a1a1a",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	controlIconBtnAdd: {
+		backgroundColor: "#ffffff",
+		borderColor: "#e5e5e5",
+	},
+	controlIconBtnSelected: {
+		backgroundColor: "#1a1a1a",
+		borderColor: "#1a1a1a",
+	},
+	controlIconBtnPressed: {
+		opacity: 0.75,
+		transform: [{ scale: 0.98 }],
 	},
 	selectedIngredientsSection: {
 		width: "100%",
 		gap: 12,
 	},
-	selectedList: {
+	orderedRow: {
 		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: 8,
+		alignItems: "center",
+		justifyContent: "space-between",
+		gap: 12,
+	},
+	orderButtons: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 6,
+	},
+	orderIconBtn: {
+		width: 34,
+		height: 34,
+		borderRadius: 10,
+		backgroundColor: "#ffffff",
+		borderWidth: 1,
+		borderColor: "#e5e5e5",
+		alignItems: "center",
+		justifyContent: "center",
+	},
+	orderIconBtnPressed: {
+		opacity: 0.7,
+		transform: [{ scale: 0.98 }],
+	},
+	selectedList: {
+		flexDirection: "column",
+		width: "100%",
+		gap: 10,
 	},
 	ingredientTag: {
 		paddingVertical: 8,
