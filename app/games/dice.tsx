@@ -8,14 +8,25 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+/**
+ * Pantalla del juego de dado.
+ * - Orquesta estado de UI (cara actual, rolling, idle)
+ * - Se suscribe al acelerómetro y dispara un roll automático en `onShake`
+ */
 export default function DiceScreen() {
 	const router = useRouter();
 	const [value, setValue] = useState<DiceFace>(1);
 	const [isRolling, setIsRolling] = useState(false);
 	const [isIdle, setIsIdle] = useState(true);
+
+	// Referencias a timeouts para poder limpiarlos correctamente.
 	const motionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+	/**
+	 * Acción de “lanzar el dado”.
+	 * Se puede disparar por botón o por el callback `onShake` del acelerómetro.
+	 */
 	const handleRoll = () => {
 		setIsRolling(true);
 		setIsIdle(false);
@@ -28,7 +39,7 @@ export default function DiceScreen() {
 		onShake: handleRoll,
 	});
 
-	// Detener rotación cuando no hay movimiento
+	// Detiene el modo rolling luego de “estabilizarse” y vuelve a idle tras un breve delay.
 	useEffect(() => {
 		if (data && (Math.abs(data.x) > 0.1 || Math.abs(data.y) > 0.1 || Math.abs(data.z) > 0.1)) {
 			setIsRolling(true);

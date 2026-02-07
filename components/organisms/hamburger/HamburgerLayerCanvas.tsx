@@ -4,6 +4,7 @@ import React, { Suspense } from "react";
 import { StyleSheet, View } from "react-native";
 import { HamburgerModel, type HamburgerLayerConfig } from "./HamburgerModel";
 
+/** Placeholder simple mientras carga el GLB (Suspense). */
 function LoadingFallback() {
 	return (
 		<mesh castShadow receiveShadow>
@@ -20,6 +21,8 @@ export function HamburgerLayerCanvas({
 	layer: HamburgerLayerConfig;
 	dpr: number;
 }) {
+	// Renderiza una sola capa en un “card canvas”.
+	// Usamos `Stage` para iluminación/cámara automática por modelo.
 	return (
 		<View style={styles.card}>
 			<View style={styles.canvasWrap}>

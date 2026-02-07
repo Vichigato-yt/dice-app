@@ -1,10 +1,14 @@
 // Pantalla de Éxito - Compra Confirmada
 import { Button } from "@/components/atoms/Button";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View, Animated } from "react-native";
 import { CheckCircle } from "lucide-react-native";
+import React, { useEffect } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 
+/**
+ * Pantalla de confirmación.
+ * Muestra total e items, con una animación de escala para feedback visual.
+ */
 export default function HamburgerSuccessScreen() {
 	const router = useRouter();
 	const params = useLocalSearchParams<{ totalPrice?: string; itemCount?: string }>();
@@ -15,6 +19,7 @@ export default function HamburgerSuccessScreen() {
 	const scaleAnim = React.useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
+		// Animación de entrada (spring) para el icono.
 		Animated.spring(scaleAnim, {
 			toValue: 1,
 			tension: 40,
@@ -70,6 +75,7 @@ function DetailItem({
 	value: string;
 	highlight?: boolean;
 }) {
+	// Fila label/value, con opción de resaltar el valor (p.ej. total pagado).
 	return (
 		<View style={styles.detailRow}>
 			<Text style={styles.detailLabel}>{label}</Text>

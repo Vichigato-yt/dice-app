@@ -21,6 +21,10 @@ type Dice3DProps = {
 
 type DiceModelProps = Dice3DProps;
 
+/**
+ * Subcomponente interno que contiene el `group` de Three y aplica rotación/estado.
+ * Se separa para mantener `Dice3D` (Canvas) simple y reutilizable.
+ */
 function DiceModel({ value, isRolling, isIdle, motionData }: DiceModelProps) {
 	const groupRef = useRef<Group>(null);
 	const idleRotationRef = useRef<number>(16);
@@ -110,6 +114,10 @@ function LoadingFallback() {
 	);
 }
 
+/**
+ * Organism: Canvas 3D del dado.
+ * Renderiza luces + modelo GLB y delega la animación de rotación a `DiceModel`.
+ */
 export function Dice3D({ value, isRolling, isIdle, motionData }: Dice3DProps) {
 	return (
 		<Canvas

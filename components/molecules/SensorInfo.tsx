@@ -8,7 +8,13 @@ type SensorInfoProps = {
 	isShaking: boolean;
 };
 
+/**
+ * Molecule que muestra:
+ * - Estado “Agitando / En reposo” (con indicador animado)
+ * - Lecturas X/Y/Z del acelerómetro cuando están disponibles
+ */
 export function SensorInfo({ data, isShaking }: SensorInfoProps) {
+	// Indicador (punto) que cambia color y escala con una animación suave.
 	const indicatorStyle = useAnimatedStyle(() => ({
 		backgroundColor: withSpring(isShaking ? "#22c55e" : "#6b7280", {
 			damping: 10,

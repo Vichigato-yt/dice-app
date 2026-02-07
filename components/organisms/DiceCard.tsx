@@ -12,6 +12,12 @@ type DiceCardProps = {
 	motionData: Vector3D | null;
 };
 
+/**
+ * Organism: tarjeta completa del dado (encabezado + canvas 3D + CTA).
+ * 
+ * Nota: existe también una versión en `components/molecules/DiceCard.tsx`.
+ * Si necesitas una card más reutilizable/compacta, usa la de molecules.
+ */
 export function DiceCard({ value, isRolling, isIdle, onRoll, motionData }: DiceCardProps) {
 	return (
 		<View style={styles.card}>

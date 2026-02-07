@@ -6,19 +6,27 @@ import {
 	type HamburgerIngredient,
 } from "@/lib/core/domain/hamburger.types";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ShoppingBag } from "lucide-react-native";
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Check, ShoppingBag } from "lucide-react-native";
 
+/**
+ * Pantalla de checkout.
+ * Recibe por params:
+ * - `ingredients`: JSON string con ingredientes (permite duplicados)
+ * - `totalPrice`: total calculado en el builder
+ */
 export default function HamburgerCheckoutScreen() {
 	const router = useRouter();
 	const params = useLocalSearchParams<{ ingredients?: string; totalPrice?: string }>();
 
+	// Parseo defensivo de params: si no vienen, usamos defaults.
 	const selectedIngredients: HamburgerIngredient[] = params.ingredients
 		? JSON.parse(params.ingredients)
 		: [];
 	const totalPrice = params.totalPrice ? parseFloat(params.totalPrice) : 0;
 
+	/** Confirma compra y navega a success. */
 	const handleConfirmPurchase = () => {
 		// Aquí se podría enviar la orden a un servidor
 		router.push({
@@ -140,6 +148,7 @@ function ItemRow({
 	color: string;
 	isBase?: boolean;
 }) {
+	// Fila del desglose de ingredientes (incluye puntito de color y precio).
 	return (
 		<View style={styles.itemRow}>
 			<View style={styles.itemContent}>
@@ -155,6 +164,7 @@ function ItemRow({
 }
 
 function PriceRow({ label, amount }: { label: string; amount: number }) {
+	// Fila simple del resumen de precios.
 	return (
 		<View style={styles.priceRow}>
 			<Text style={styles.priceRowLabel}>{label}</Text>

@@ -1,8 +1,8 @@
+import type { DiceFace, Vector3D } from "@/lib/core/domain";
 import { Dice6 } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "../atoms/Button";
 import { Dice3D } from "../organisms/Dice3D";
-import type { DiceFace, Vector3D } from "@/lib/core/domain";
 
 type DiceCardProps = {
 	value: DiceFace;
@@ -12,6 +12,12 @@ type DiceCardProps = {
 	motionData?: Vector3D | null;
 };
 
+/**
+ * Molecule que agrupa la UI del dado:
+ * - Encabezado (icono + título)
+ * - Render 3D del dado (organism `Dice3D`)
+ * - Acción principal para lanzar el dado
+ */
 export function DiceCard({ value, isRolling, isIdle = false, onRoll, motionData }: DiceCardProps) {
 	return (
 		<View style={styles.card}>

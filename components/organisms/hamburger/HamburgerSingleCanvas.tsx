@@ -3,6 +3,7 @@ import React, { Suspense } from "react";
 import { StyleSheet, View } from "react-native";
 import { HamburgerModel, type HamburgerLayerConfig } from "./HamburgerModel";
 
+/** Placeholder simple mientras carga el GLB (Suspense). */
 function LoadingFallback() {
 	return (
 		<mesh castShadow receiveShadow>
@@ -11,12 +12,15 @@ function LoadingFallback() {
 		</mesh>
 	);
 }
-
-
+/** Limita un valor dentro de [min, max]. */
 function clamp(min: number, value: number, max: number) {
 	return Math.min(max, Math.max(min, value));
 }
 
+/**
+ * Calcula posiciones Y “exploded” para apilar capas.
+ * Reduce ligeramente el espaciado cuando hay muchas capas para evitar una torre infinita.
+ */
 function computeExplodedPositions(layerCount: number) {
 	// A más capas, reducimos ligeramente el espaciado para que no quede absurdamente alta,
 	// y a la vez alejamos la cámara (ver abajo).
@@ -33,10 +37,14 @@ export function HamburgerSingleCanvas({
 	layers: HamburgerLayerConfig[];
 	dpr: number;
 }) {
+	// Posiciones verticales (Y) de cada capa.
 	const positionsY = computeExplodedPositions(layers.length);
 	const minY = Math.min(...positionsY);
 	const maxY = Math.max(...positionsY);
+
+	// Altura total aproximada para ajustar la cámara en base a la “torre” real.
 	const heightSpan = Math.max(1, maxY - minY) + 1.2; // padding
+	// Cámara se aleja/sube según altura de capas.
 	const cameraZ = 4.8 + heightSpan * 1.25;
 	const cameraY = 0.9 + heightSpan * 0.28;
 	const far = Math.max(80, cameraZ + 80);
@@ -65,6 +73,7 @@ export function HamburgerSingleCanvas({
 
 				<Suspense fallback={<LoadingFallback />}>
 					{layers.map((layer, index) => (
+						// Cada capa se renderiza en un group con su posición Y.
 						<group key={layer.id} position={[0, positionsY[index] ?? 0, 0]}>
 							<HamburgerModel modelAsset={layer.modelAsset} scale={layer.scale} />
 						</group>

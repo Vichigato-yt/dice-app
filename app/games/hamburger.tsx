@@ -2,14 +2,21 @@
 import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
 import { useRouter } from "expo-router";
+import { Layers } from "lucide-react-native";
 import React, { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Layers } from "lucide-react-native";
 
+/**
+ * Pantalla de “solo lectura” para visualizar una hamburguesa predefinida.
+ * Incluye toggle de layout 3D:
+ * - `separate`: una tarjeta/canvas por capa
+ * - `single`: una sola escena con cámara dinámica
+ */
 export default function HamburgerScreen() {
 	const router = useRouter();
 	const [layout, setLayout] = useState<"single" | "separate">("separate");
 
+	// Ajusta estilos del contenedor 3D según el layout elegido.
 	const modelContainerStyle = useMemo(
 		() => [styles.modelContainerBase, layout === "single" ? styles.modelContainerSingle : null],
 		[layout]
@@ -35,7 +42,7 @@ export default function HamburgerScreen() {
 					{layout === "single" ? "Ver por capas" : "Ver en una sola escena"}
 				</Button>
 
-				{/* Contenedor del modelo 3D */}
+				{/* Contenedor del modelo 3D (organism reusable) */}
 				<View style={modelContainerStyle}>
 					<Hamburger3D layout={layout} selectedIngredients={["queso", "pepinillos", "lechuga", "carne"]} />
 				</View>
@@ -70,6 +77,7 @@ export default function HamburgerScreen() {
 }
 
 function LayerItem({ name, color }: { name: string; color: string }) {
+	// Helper visual para la leyenda (no tiene lógica de negocio).
 	return (
 		<View style={styles.layerItem}>
 			<View style={[styles.colorIndicator, { backgroundColor: color }]} />

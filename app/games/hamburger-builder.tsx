@@ -2,33 +2,49 @@
 import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
 import {
-	HAMBURGER_INGREDIENTS,
-	type HamburgerIngredient,
-	calculateHamburgerPrice,
+    HAMBURGER_INGREDIENTS,
+    type HamburgerIngredient,
+    calculateHamburgerPrice,
 } from "@/lib/core/domain/hamburger.types";
 import { useRouter } from "expo-router";
+import { ChevronDown, ChevronUp, Minus, Plus, ShoppingCart } from "lucide-react-native";
 import React, { useMemo, useState } from "react";
-import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
-import { ShoppingCart, Plus, Minus, X, ChevronUp, ChevronDown } from "lucide-react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const INGREDIENTS_LIST: HamburgerIngredient[] = ["queso", "pepinillos", "lechuga", "carne"];
 
+/**
+ * Pantalla interactiva para construir una hamburguesa.
+ * - Maneja el estado `selectedIngredients` (permite duplicados)
+ * - Renderiza vista 3D en vivo via `Hamburger3D`
+ * - Permite reordenar capas (up/down)
+ * - Navega a checkout con params serializados
+ */
 export default function HamburgerBuilderScreen() {
 	const router = useRouter();
 	const [selectedIngredients, setSelectedIngredients] = useState<HamburgerIngredient[]>([]);
+
+	// Precio total calculado en dominio (función pura).
 	const totalPrice = calculateHamburgerPrice(selectedIngredients);
+	// Capas = ingredientes + 2 panes.
 	const layerCount = selectedIngredients.length + 2;
 
+	// Ajusta el alto del canvas 3D para evitar que la hamburguesa “se aplaste”.
 	const modelHeight = useMemo(() => {
 		// Crece con cada ingrediente para no “aplastar” la vista.
 		// Límite superior para evitar un canvas ridículamente grande.
 		return Math.min(720, 280 + layerCount * 18);
 	}, [layerCount]);
 
+	/** Agrega 1 unidad del ingrediente al final (soporta duplicados). */
 	const addIngredient = (ingredient: HamburgerIngredient) => {
 		setSelectedIngredients((prev) => [...prev, ingredient]);
 	};
 
+	/**
+	 * Quita 1 unidad del ingrediente (la última aparición) si existe.
+	 * Esto permite tener cantidades grandes (p.ej. 30 carnes).
+	 */
 	const removeOneIngredient = (ingredient: HamburgerIngredient) => {
 		setSelectedIngredients((prev) => {
 			const index = prev.lastIndexOf(ingredient);
@@ -39,6 +55,7 @@ export default function HamburgerBuilderScreen() {
 		});
 	};
 
+	/** Navega al checkout pasando ingredientes y total como params. */
 	const handleBuy = () => {
 		router.push({
 			pathname: "./hamburger-checkout",
@@ -49,6 +66,7 @@ export default function HamburgerBuilderScreen() {
 		});
 	};
 
+	/** Mueve una capa de ingrediente dentro del array (reordenación visual). */
 	const moveIngredientAt = (index: number, direction: "up" | "down") => {
 		setSelectedIngredients((prev) => {
 			const targetIndex = direction === "up" ? index - 1 : index + 1;
@@ -214,6 +232,7 @@ export default function HamburgerBuilderScreen() {
 }
 
 function IngredientTag({ label, color }: { label: string; color: string }) {
+	// Badge visual para representar una capa en el listado de orden.
 	return (
 		<View style={[styles.ingredientTag, { backgroundColor: color }]}>
 			<Text style={styles.ingredientTagText}>{label}</Text>

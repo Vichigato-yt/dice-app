@@ -11,7 +11,12 @@ type DiceDisplayProps = {
 	isRolling: boolean;
 };
 
+/**
+ * Muestra el valor del dado como un “tile” 2D.
+ * Cuando `isRolling` es true, aplica una animación corta de rotación + escala.
+ */
 export function DiceDisplay({ value, isRolling }: DiceDisplayProps) {
+	// Estilo animado que se recalcula en el hilo UI de Reanimated.
 	const animatedStyle = useAnimatedStyle(() => {
 		if (isRolling) {
 			return {
