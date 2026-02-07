@@ -1,10 +1,16 @@
-// Casos de Uso
+/**
+ * Casos de uso del dado.
+ *
+ * Orquestan servicios puros (`DiceLogic`, `Physics3D`) y aplican reglas de estado.
+ * La UI llama a estos métodos para actualizar `DiceState`.
+ */
 import { DiceLogic, Physics3D } from "./dice.service";
 import { DICE_FACE_ROTATIONS, DiceFace, DiceState, Rotation3D, Vector3D } from "./dice.types";
 
 export const DiceUseCases = {
 	/**
-	 * Inicia una tirada de dado
+	 * Inicia una tirada de dado.
+	 * Devuelve el nuevo estado y la cara resultante.
 	 */
 	startRoll: (currentState: DiceState): { state: DiceState; face: DiceFace } => {
 		const face = DiceLogic.rollRandom();
@@ -21,7 +27,8 @@ export const DiceUseCases = {
 	},
 
 	/**
-	 * Aplica movimiento del acelerómetro a la velocidad
+	 * Aplica movimiento del acelerómetro a la velocidad.
+	 * `sensitivity` amplifica la entrada (más alto = más “loco”).
 	 */
 	applyMotion: (
 		state: DiceState,
@@ -41,7 +48,9 @@ export const DiceUseCases = {
 	},
 
 	/**
-	 * Actualiza la posición del dado según la física
+	 * Actualiza rotación y velocidad usando física.
+	 * - `deltaTime`: tiempo transcurrido entre frames (segundos)
+	 * - `friction`: factor de fricción para ir frenando la velocidad
 	 */
 	updateRotation: (
 		state: DiceState,
@@ -89,7 +98,7 @@ export const DiceUseCases = {
 	},
 
 	/**
-	 * Detiene el rolling
+	 * Detiene el rolling (la UI puede seguir interpolando a `targetRotation`).
 	 */
 	stopRoll: (state: DiceState): DiceState => ({
 		...state,

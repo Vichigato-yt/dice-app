@@ -1,4 +1,7 @@
-// Configuración (Thresholds)
+/**
+ * Constantes de configuración para sensores y detección de shake.
+ * Son números “tuneables” que afectan sensibilidad y UX.
+ */
 
 // Umbral de agitación en múltiplos de g (gravedad ≈ 1.0)
 // 1.78–2.2 suele funcionar bien para evitar falsos positivos

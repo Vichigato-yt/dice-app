@@ -1,7 +1,14 @@
-// Servicios de Dominio - Lógica de negocio pura
+/**
+ * Servicios de dominio (DDD): lógica pura reutilizable.
+ *
+ * No depende de sensores, UI ni navegación.
+ */
 import { DiceFace, Rotation3D, Vector3D } from "./dice.types";
 
-// Física 3D
+/**
+ * Helpers de física 3D (operaciones sobre vectores/rotaciones).
+ * Se usan desde casos de uso (`DiceUseCases`).
+ */
 export const Physics3D = {
 	/**
 	 * Aplica fricción a la velocidad
@@ -55,7 +62,10 @@ export const Physics3D = {
 	}),
 };
 
-// Lógica del Juego
+/**
+ * Lógica del juego del dado.
+ * Contiene validaciones y reglas simples (cara válida, random, umbrales).
+ */
 export const DiceLogic = {
 	/**
 	 * Valida si un número es una cara de dado válida
