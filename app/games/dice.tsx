@@ -86,7 +86,7 @@ export default function DiceScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#0f0f0f",
 		justifyContent: "space-between",
 		alignItems: "center",
 		paddingBottom: 20,
