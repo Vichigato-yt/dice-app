@@ -37,6 +37,7 @@ yarn-error.*
 # Firebase / credentials
 google-services.json
 service-account.json
+notificacionespush2008-e092d3b8760d.json
 
 # typescript
 *.tsbuildinfo
