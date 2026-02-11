@@ -18,12 +18,12 @@ type Hamburger3DProps = {
  * pero el dominio usa `lechuga`.
  */
 const MODEL_ASSETS: Record<string, GlbAsset> = {
-	pansuperior: require("@/assets/images/Hamburguesa/pansuperior.glb"),
-	paninferior: require("@/assets/images/Hamburguesa/paninferior.glb"),
-	queso: require("@/assets/images/Hamburguesa/queso.glb"),
-	pepinillos: require("@/assets/images/Hamburguesa/pepinillos.glb"),
-	leshuga: require("@/assets/images/Hamburguesa/leshuga.glb"),
-	carne: require("@/assets/images/Hamburguesa/carne.glb"),
+	pansuperior: require("@assets/images/Hamburguesa/pansuperior.glb"),
+	paninferior: require("@assets/images/Hamburguesa/paninferior.glb"),
+	queso: require("@assets/images/Hamburguesa/queso.glb"),
+	pepinillos: require("@assets/images/Hamburguesa/pepinillos.glb"),
+	leshuga: require("@assets/images/Hamburguesa/leshuga.glb"),
+	carne: require("@assets/images/Hamburguesa/carne.glb"),
 };
 
 export function Hamburger3D({

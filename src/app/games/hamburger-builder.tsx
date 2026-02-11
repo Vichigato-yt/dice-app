@@ -1,6 +1,6 @@
 // Pantalla Interactiva - Constructor de Hamburguesa
-import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
+import { Button } from "@/components/ui";
 import {
     HAMBURGER_INGREDIENTS,
     type HamburgerIngredient,

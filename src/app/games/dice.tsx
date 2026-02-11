@@ -1,6 +1,6 @@
 // Pantalla del Juego - Presentación
-import { Button } from "@/components/atoms/Button";
 import { DiceCard } from "@/components/organisms/DiceCard";
+import { Button } from "@/components/ui";
 import { DiceLogic, type DiceFace } from "@/lib/core/domain";
 import { useAccelerometer } from "@/lib/modules/sensors/accelerometer";
 import * as Haptics from "expo-haptics";

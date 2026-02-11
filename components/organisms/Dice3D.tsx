@@ -7,7 +7,7 @@ import {
 } from "@/lib/core/domain";
 import { useGLTF } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import React, { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import type { Group } from "three";
 import type { GLTF } from "three-stdlib";
@@ -37,8 +37,8 @@ function DiceModel({ value, isRolling, isIdle, motionData }: DiceModelProps) {
 	});
 	const motionStopTimeRef = useRef<number | null>(null);
 
-	// Cargar el modelo GLB
-	const glb = useGLTF(require("@/assets/images/Dice.glb"));
+	// Cargar el modelo GLB (alias apunta a /assets)
+	const glb = useGLTF(require("@assets/images/Dice.glb"));
 	const scene = (glb as GLTF).scene;
 
 	// Inicializar el objetivo con la rotación correcta

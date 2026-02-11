@@ -1,6 +1,6 @@
 // Pantalla de Visualización de Hamburguesa
-import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
+import { Button } from "@/components/ui";
 import { useRouter } from "expo-router";
 import { Layers } from "lucide-react-native";
 import React, { useMemo, useState } from "react";

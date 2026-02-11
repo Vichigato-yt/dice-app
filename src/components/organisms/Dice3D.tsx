@@ -37,8 +37,8 @@ function DiceModel({ value, isRolling, isIdle, motionData }: DiceModelProps) {
 	});
 	const motionStopTimeRef = useRef<number | null>(null);
 
-	// Cargar el modelo GLB
-	const glb = useGLTF(require("@/assets/images/Dice.glb"));
+	// Cargar el modelo GLB (alias apunta a /assets)
+	const glb = useGLTF(require("@assets/images/Dice.glb"));
 	const scene = (glb as GLTF).scene;
 
 	// Inicializar el objetivo con la rotación correcta

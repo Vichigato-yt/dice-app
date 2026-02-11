@@ -1,5 +1,5 @@
 // Pantalla de Éxito - Compra Confirmada
-import { Button } from "@/components/atoms/Button";
+import { Button } from "@/components/ui";
 import { NotificationAdapter } from "@/lib/core/notifications/notification.adapter";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CheckCircle } from "lucide-react-native";
