@@ -2,8 +2,8 @@
 import { Button } from "@/components/atoms/Button";
 import { Hamburger3D } from "@/components/organisms/Hamburger3D";
 import {
-	HAMBURGER_INGREDIENTS,
-	type HamburgerIngredient,
+    HAMBURGER_INGREDIENTS,
+    type HamburgerIngredient,
 } from "@/lib/core/domain/hamburger.types";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ShoppingBag } from "lucide-react-native";
@@ -43,7 +43,7 @@ export default function HamburgerCheckoutScreen() {
 			<View style={styles.container}>
 				{/* Header */}
 				<View style={styles.header}>
-					<ShoppingBag size={40} color="#1a1a1a" strokeWidth={2} />
+					<ShoppingBag size={40} color="#bd93f9" strokeWidth={2} />
 					<Text style={styles.title}>Resumen de tu Orden</Text>
 				</View>
 
@@ -176,7 +176,7 @@ function PriceRow({ label, amount }: { label: string; amount: number }) {
 const styles = StyleSheet.create({
 	scrollContainer: {
 		flexGrow: 1,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#0f0f0f",
 	},
 	container: {
 		padding: 20,
@@ -192,25 +192,25 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 28,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	modelContainer: {
 		width: "100%",
 		height: 280,
-		backgroundColor: "#f8f8f8",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 20,
 		overflow: "hidden",
 		borderWidth: 2,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	detailsCard: {
 		width: "100%",
-		backgroundColor: "#f8f8f8",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 16,
 		padding: 16,
 		gap: 12,
 		borderWidth: 1,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	detailsHeader: {
 		marginBottom: 4,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
 	detailsTitle: {
 		fontSize: 16,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	itemsList: {
 		gap: 8,
@@ -229,10 +229,10 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		paddingVertical: 10,
 		paddingHorizontal: 12,
-		backgroundColor: "#fff",
+		backgroundColor: "#0f0f0f",
 		borderRadius: 8,
 		borderWidth: 1,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	itemContent: {
 		flexDirection: "row",
@@ -252,22 +252,22 @@ const styles = StyleSheet.create({
 	itemLabel: {
 		fontSize: 14,
 		fontWeight: "600",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	itemNote: {
 		fontSize: 11,
-		color: "#9ca3af",
+		color: "#666",
 		fontStyle: "italic",
 	},
 	itemPrice: {
 		fontSize: 14,
 		fontWeight: "600",
-		color: "#1a1a1a",
+		color: "#bd93f9",
 		marginLeft: 8,
 	},
 	divider: {
 		height: 1,
-		backgroundColor: "#e5e5e5",
+		backgroundColor: "#2a2a4a",
 		marginVertical: 4,
 	},
 	priceBreakdown: {
@@ -282,12 +282,12 @@ const styles = StyleSheet.create({
 	},
 	priceRowLabel: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: "#888",
 		fontWeight: "500",
 	},
 	priceRowAmount: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: "#888",
 		fontWeight: "600",
 	},
 	totalRow: {
@@ -297,36 +297,36 @@ const styles = StyleSheet.create({
 		paddingTop: 8,
 		paddingHorizontal: 4,
 		borderTopWidth: 1,
-		borderTopColor: "#e5e5e5",
+		borderTopColor: "#2a2a4a",
 		marginTop: 4,
 	},
 	totalLabel: {
 		fontSize: 16,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	totalAmount: {
 		fontSize: 20,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#bd93f9",
 	},
 	infoCard: {
 		width: "100%",
-		backgroundColor: "#ecfdf5",
+		backgroundColor: "#1a2e1a",
 		borderRadius: 12,
 		padding: 14,
 		gap: 8,
 		borderWidth: 1,
-		borderColor: "#a7f3d0",
+		borderColor: "#2a4a2a",
 	},
 	infoTitle: {
 		fontSize: 14,
 		fontWeight: "700",
-		color: "#065f46",
+		color: "#6ee7b7",
 	},
 	infoText: {
 		fontSize: 13,
-		color: "#047857",
+		color: "#34d399",
 	},
 	actionButtons: {
 		width: "100%",

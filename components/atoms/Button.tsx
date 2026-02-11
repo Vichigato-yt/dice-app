@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
 		minWidth: 160,
 	},
 	primary: {
-		backgroundColor: "#1a1a1a",
+		backgroundColor: "#bd93f9",
 	},
 	secondary: {
 		backgroundColor: "transparent",
 		borderWidth: 2,
-		borderColor: "#1a1a1a",
+		borderColor: "#bd93f9",
 	},
 	pressed: {
 		opacity: 0.7,
@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 	},
 	textSecondary: {
-		color: "#1a1a1a",
+		color: "#bd93f9",
 	},
 });

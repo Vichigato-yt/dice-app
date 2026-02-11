@@ -85,7 +85,7 @@ export default function HamburgerBuilderScreen() {
 				{/* Header */}
 				<View style={styles.header}>
 					<View style={styles.titleRow}>
-						<ShoppingCart size={32} color="#1a1a1a" strokeWidth={2.5} />
+						<ShoppingCart size={32} color="#bd93f9" strokeWidth={2.5} />
 						<Text style={styles.title}>Construir Hamburguesa</Text>
 					</View>
 					<Text style={styles.subtitle}>Añade ingredientes y personaliza tu hamburguesa</Text>
@@ -153,7 +153,7 @@ export default function HamburgerBuilderScreen() {
 												pressed ? styles.controlIconBtnPressed : null,
 											]}
 										>
-											<Minus size={18} color={hasAny ? "#fff" : "#9ca3af"} strokeWidth={2.5} />
+											<Minus size={18} color={hasAny ? "#fff" : "#555"} strokeWidth={2.5} />
 										</Pressable>
 										<Pressable
 											onPress={() => addIngredient(ingredient)}
@@ -163,7 +163,7 @@ export default function HamburgerBuilderScreen() {
 												pressed ? styles.controlIconBtnPressed : null,
 											]}
 										>
-											<Plus size={18} color="#1a1a1a" strokeWidth={2.5} />
+											<Plus size={18} color="#fff" strokeWidth={2.5} />
 										</Pressable>
 									</View>
 								</Pressable>
@@ -195,7 +195,7 @@ export default function HamburgerBuilderScreen() {
 												disabled={index === 0}
 												style={({ pressed }) => [styles.orderIconBtn, pressed && styles.orderIconBtnPressed]}
 											>
-												<ChevronUp size={18} color={index === 0 ? "#9ca3af" : "#1a1a1a"} strokeWidth={2.5} />
+												<ChevronUp size={18} color={index === 0 ? "#555" : "#bd93f9"} strokeWidth={2.5} />
 											</Pressable>
 											<Pressable
 												onPress={() => moveIngredientAt(index, "down")}
@@ -204,7 +204,7 @@ export default function HamburgerBuilderScreen() {
 											>
 												<ChevronDown
 													size={18}
-													color={index === selectedIngredients.length - 1 ? "#9ca3af" : "#1a1a1a"}
+													color={index === selectedIngredients.length - 1 ? "#555" : "#bd93f9"}
 													strokeWidth={2.5}
 												/>
 											</Pressable>
@@ -243,7 +243,7 @@ function IngredientTag({ label, color }: { label: string; color: string }) {
 const styles = StyleSheet.create({
 	scrollContainer: {
 		flexGrow: 1,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#0f0f0f",
 	},
 	container: {
 		padding: 20,
@@ -264,41 +264,41 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 28,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	subtitle: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: "#888",
 		textAlign: "center",
 	},
 	modelContainer: {
 		width: "100%",
 		height: 300,
-		backgroundColor: "#f8f8f8",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 20,
 		overflow: "hidden",
 		borderWidth: 2,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	priceCard: {
 		width: "100%",
-		backgroundColor: "#f0f0f0",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 16,
 		padding: 16,
 		alignItems: "center",
 		gap: 8,
 		borderWidth: 2,
-		borderColor: "#1a1a1a",
+		borderColor: "#bd93f9",
 	},
 	priceLabel: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: "#888",
 		fontWeight: "500",
 	},
 	priceValue: {
 		fontSize: 32,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#bd93f9",
 	},
 	ingredientsSection: {
 		width: "100%",
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
 	sectionTitle: {
 		fontSize: 18,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	ingredientsGrid: {
 		gap: 12,
@@ -318,14 +318,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		padding: 14,
-		backgroundColor: "#f8f8f8",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 12,
 		borderWidth: 2,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	ingredientButtonSelected: {
-		backgroundColor: "#1a1a1a",
-		borderColor: "#1a1a1a",
+		backgroundColor: "#2a2a4a",
+		borderColor: "#bd93f9",
 	},
 	ingredientButtonContent: {
 		flex: 1,
@@ -334,18 +334,18 @@ const styles = StyleSheet.create({
 	ingredientButtonText: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	ingredientButtonTextSelected: {
-		color: "#fff",
+		color: "#bd93f9",
 	},
 	ingredientPrice: {
 		fontSize: 12,
-		color: "#6b7280",
+		color: "#888",
 		fontWeight: "500",
 	},
 	ingredientPriceSelected: {
-		color: "#d1d5db",
+		color: "#bd93f9",
 	},
 	ingredientControls: {
 		flexDirection: "row",
@@ -358,20 +358,20 @@ const styles = StyleSheet.create({
 		height: 26,
 		paddingHorizontal: 8,
 		borderRadius: 13,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#0f0f0f",
 		borderWidth: 1,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	countBadgeSelected: {
-		backgroundColor: "#1a1a1a",
-		borderColor: "#1a1a1a",
+		backgroundColor: "#bd93f9",
+		borderColor: "#bd93f9",
 	},
 	countText: {
 		fontSize: 12,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#888",
 	},
 	countTextSelected: {
 		color: "#ffffff",
@@ -380,19 +380,19 @@ const styles = StyleSheet.create({
 		width: 34,
 		height: 34,
 		borderRadius: 10,
-		backgroundColor: "#1a1a1a",
+		backgroundColor: "#2a2a4a",
 		borderWidth: 1,
-		borderColor: "#1a1a1a",
+		borderColor: "#2a2a4a",
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	controlIconBtnAdd: {
-		backgroundColor: "#ffffff",
-		borderColor: "#e5e5e5",
+		backgroundColor: "#bd93f9",
+		borderColor: "#bd93f9",
 	},
 	controlIconBtnSelected: {
-		backgroundColor: "#1a1a1a",
-		borderColor: "#1a1a1a",
+		backgroundColor: "#2a2a4a",
+		borderColor: "#bd93f9",
 	},
 	controlIconBtnPressed: {
 		opacity: 0.75,
@@ -417,9 +417,9 @@ const styles = StyleSheet.create({
 		width: 34,
 		height: 34,
 		borderRadius: 10,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#1a1a2e",
 		borderWidth: 1,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 		alignItems: "center",
 		justifyContent: "center",
 	},
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
 	ingredientTagText: {
 		fontSize: 12,
 		fontWeight: "600",
-		color: "#1a1a1a",
+		color: "#0f0f0f",
 	},
 	actionButtons: {
 		width: "100%",

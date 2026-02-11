@@ -1,8 +1,9 @@
 // Pantalla de Éxito - Compra Confirmada
 import { Button } from "@/components/atoms/Button";
+import { NotificationAdapter } from "@/lib/core/notifications/notification.adapter";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { CheckCircle } from "lucide-react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
 
 /**
@@ -17,6 +18,7 @@ export default function HamburgerSuccessScreen() {
 	const itemCount = params.itemCount ? parseInt(params.itemCount) : 0;
 
 	const scaleAnim = React.useRef(new Animated.Value(0)).current;
+	const notificationSent = useRef(false);
 
 	useEffect(() => {
 		// Animación de entrada (spring) para el icono.
@@ -26,7 +28,26 @@ export default function HamburgerSuccessScreen() {
 			friction: 7,
 			useNativeDriver: true,
 		}).start();
-	}, [scaleAnim]);
+
+		// Guard: solo enviar notificaciones una vez por montaje
+		if (notificationSent.current) return;
+		notificationSent.current = true;
+
+		// Notificación inmediata: compra realizada con éxito
+		NotificationAdapter.scheduleLocalNotification({
+			title: 'Compra realizada con éxito',
+			body: `Tu orden de $${totalPrice.toFixed(2)} ha sido confirmada. Estamos preparando tu hamburguesa.`,
+			data: { url: '/games/hamburger-success' },
+		});
+
+		// Notificación a los 20 segundos: pedido listo
+		NotificationAdapter.scheduleLocalNotification({
+			title: 'Tu pedido está listo',
+			body: 'Tu hamburguesa ya está lista para recoger. Buen provecho!',
+			data: { url: '/games/hamburger-success' },
+			seconds: 20,
+		});
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -39,7 +60,7 @@ export default function HamburgerSuccessScreen() {
 					},
 				]}
 			>
-				<CheckCircle size={100} color="#10b981" strokeWidth={1.5} />
+				<CheckCircle size={100} color="#bd93f9" strokeWidth={1.5} />
 			</Animated.View>
 
 			{/* Título */}
@@ -89,7 +110,7 @@ function DetailItem({
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#ffffff",
+		backgroundColor: "#0f0f0f",
 		justifyContent: "center",
 		alignItems: "center",
 		paddingHorizontal: 20,
@@ -101,21 +122,21 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 32,
 		fontWeight: "700",
-		color: "#1a1a1a",
+		color: "#ffffff",
 		textAlign: "center",
 	},
 	subtitle: {
 		fontSize: 16,
-		color: "#6b7280",
+		color: "#888",
 		textAlign: "center",
 	},
 	detailsCard: {
 		width: "100%",
-		backgroundColor: "#f8f8f8",
+		backgroundColor: "#1a1a2e",
 		borderRadius: 16,
 		padding: 16,
 		borderWidth: 1,
-		borderColor: "#e5e5e5",
+		borderColor: "#2a2a4a",
 	},
 	detailRow: {
 		flexDirection: "row",
@@ -125,22 +146,22 @@ const styles = StyleSheet.create({
 	},
 	detailLabel: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: "#888",
 		fontWeight: "500",
 	},
 	detailValue: {
 		fontSize: 16,
 		fontWeight: "600",
-		color: "#1a1a1a",
+		color: "#ffffff",
 	},
 	detailValueHighlight: {
 		fontSize: 18,
 		fontWeight: "700",
-		color: "#10b981",
+		color: "#bd93f9",
 	},
 	divider: {
 		height: 1,
-		backgroundColor: "#e5e5e5",
+		backgroundColor: "#2a2a4a",
 	},
 	actionButtons: {
 		width: "100%",

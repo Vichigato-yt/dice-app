@@ -7,7 +7,7 @@ import React, { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 /**
- * Pantalla de “solo lectura” para visualizar una hamburguesa predefinida.
+ * Pantalla de "solo lectura" para visualizar una hamburguesa predefinida.
  * Incluye toggle de layout 3D:
  * - `separate`: una tarjeta/canvas por capa
  * - `single`: una sola escena con cámara dinámica
