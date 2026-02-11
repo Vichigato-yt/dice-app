@@ -375,5 +375,5 @@ En `lib/core/logic/constants.ts`:
 - `ACCEL_UPDATE_INTERVAL_MS = 100` (frecuencia de lectura del acelerómetro)
 - `SHAKE_COOLDOWN_MS = 600` (tiempo mínimo entre detecciones consecutivas)
 
-./assets/gifdemostrando.gif
+![Demostración de la app](./assets/gifdemostrando.mp4)
 
